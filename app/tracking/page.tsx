@@ -1,0 +1,16 @@
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
+
+export default function TrackingPage() {
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+      <main className="container py-12">
+        <h1 className="text-2xl font-bold text-red-600 mb-4">Order Tracking</h1>
+        <p>Enter your tracking number to view delivery status.</p>
+        {/* Tracking form and API integration can be added here */}
+      </main>
+      <Footer />
+    </div>
+  )
+}
