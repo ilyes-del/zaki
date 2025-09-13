@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ShoppingCart, Search, Menu, User, Package } from "lucide-react"
@@ -11,6 +12,14 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { items } = useCart()
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0)
+  const pathname = usePathname()
+
+  const navLinks = [
+    { href: "/products", label: "Products" },
+    { href: "/categories", label: "Categories" },
+    { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" },
+  ]
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -18,36 +27,25 @@ export function Header() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <Package className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold text-foreground">Promo Market</span>
+            <Package className="h-8 w-8 text-red-600" />
+            <span className="text-xl font-bold text-red-600">Promo Market</span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/products"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Products
-            </Link>
-            <Link
-              href="/categories"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Categories
-            </Link>
-            <Link
-              href="/about"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              About
-            </Link>
-            <Link
-              href="/contact"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Contact
-            </Link>
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-sm font-medium transition-colors px-2 py-1 rounded ${
+                  pathname === link.href
+                    ? "text-white bg-red-600 underline"
+                    : "text-muted-foreground hover:text-red-600 hover:underline"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
 
           {/* Right Actions */}
@@ -81,18 +79,19 @@ export function Header() {
         {isMenuOpen && (
           <div className="md:hidden border-t py-4">
             <nav className="flex flex-col space-y-4">
-              <Link href="/products" className="text-sm font-medium text-muted-foreground hover:text-foreground">
-                Products
-              </Link>
-              <Link href="/categories" className="text-sm font-medium text-muted-foreground hover:text-foreground">
-                Categories
-              </Link>
-              <Link href="/about" className="text-sm font-medium text-muted-foreground hover:text-foreground">
-                About
-              </Link>
-              <Link href="/contact" className="text-sm font-medium text-muted-foreground hover:text-foreground">
-                Contact
-              </Link>
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`text-sm font-medium px-2 py-1 rounded ${
+                    pathname === link.href
+                      ? "text-white bg-red-600 underline"
+                      : "text-muted-foreground hover:text-red-600 hover:underline"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
             </nav>
           </div>
         )}
